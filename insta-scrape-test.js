@@ -46,10 +46,10 @@ const { elementIsDisabled } = require('selenium-webdriver/lib/until');
     const loginButton = await driver.wait(until.elementLocated(By.className('sqdOP  L3NKy   y3zKF')),3000);
     loginButton.click();
 
-    //to clear save login info by clicking "not now"
-    await driver.sleep(2000)
-    const saveLoginInfoButton =  await driver.wait(until.elementLocated(By.className('cmbtv')),3000);
-    await saveLoginInfoButton.click();
+    // //to clear save login info by clicking "not now"
+    // await driver.sleep(2000)
+    // const saveLoginInfoButton =  await driver.wait(until.elementLocated(By.className('cmbtv')),3000);
+    // await saveLoginInfoButton.click();
 
     //to clear turn on post notif button
     await driver.sleep(2000)
@@ -69,7 +69,7 @@ const { elementIsDisabled } = require('selenium-webdriver/lib/until');
             // //await searchButton.sendKeys(Key.RETURN)
     */
     await driver.sleep(3000)
-    await driver.get('https://www.instagram.com/kimkardashian/');
+    await driver.get('https://www.instagram.com/cristiano/');
     
 
     //clicking first post
@@ -80,7 +80,7 @@ const { elementIsDisabled } = require('selenium-webdriver/lib/until');
 
     //clicking load more
     await driver.sleep(2300)
-    const loadMore = await driver.findElement(By.xpath('/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/li/div'))
+    const loadMore = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div'))
     loadMore.click();
 
     await driver.sleep(2300)
@@ -92,11 +92,25 @@ const { elementIsDisabled } = require('selenium-webdriver/lib/until');
     await driver.sleep(2300)
     loadMore.click();
 
+    //targeting commments
+    /* Goal:  target by 'Mr508', getting full html and parse the comments out of the html later*/
+    let testArray;
+    let arrayComments;
+    // const commentsList = await (await driver.findElement(By.xpath('/html/body/div[4]/div[2]/div/article/div[3]/div[1]/ul'))).getAttribute('innerText')
+    // console.log(commentsList)
+    
+    //targeting list of comments UL class XQXOT pxf-y
+    const commentsList = await (await driver.findElement(By.xpath('/html/body/div[4]/div[2]/div/article/div[3]/div[1]/ul')));
 
-
-
-
- 
+    //get all children 
+    testArray = await commentsList.findElements(By.xpath('./child::*'))
+    testArray.forEach(async(element)=>{
+      let temp2 = await (await element.findElement(By.css('.C4VMK > span'))).getAttribute('innerText')
+      console.log(temp2)
+      
+      //arrayComments.push(temp2)
+    })
+    console.log(arrayComments)
     
   
 })().then((t)=>{
