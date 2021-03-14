@@ -2,37 +2,56 @@
 const scraper = require('./insta-scrape-test.js')
 const express = require('express')
 const fs = require('fs')
-const emojiStrip = require('emoji-strip')
+const emojiStrip = require('emoji-strip');
+const e = require('express');
+const { until } = require('selenium-webdriver');
 
+var UN ='SentiScrape';
+var PW ='kirklandExpo';
+
+
+
+//REQUEST ROUTING
 const app = express()
 
+// respond with sentiment rating when url with specific celeb choice is requested
+    // app.get(`/${celebChoice}`, function (req, res) {
+    //     sentimentRating = scraper.main_scrape_func(UN,PW,celebChoice)
+    //     res.send()//return sentiment rating
+    //   })
 
-fs.readFile('comments.txt','utf-8',(err,data)=>{
+
+//MAIN SCRAPE FUNCTION
+const celebChoice = 'cristiano'
+let t = scraper.main_scrape_func(UN,PW,celebChoice)
+console.log(t)
+
+
+
+
+
+/* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/
+    // fs.readFile('comments.txt','utf-8',(err,data)=>{
+        
+    //     let noSymbols = symStripFunc(data)    //non alphanumeric symbols removed
+    //     let noEmojis = emojiStrip(noSymbols)  //removes emojis, might be redundant because symStringFunc did it but just as a double measure.
+    //     let commaSplitArray = noEmojis.split(",") //seperates comments at ',' and puts them in array
+    //     let emptiesRemovedArray = commaSplitArray.filter( elem => elem !== " ") //removes all empty comments left from removing emojis
+    //     console.log(emptiesRemovedArray)
+    // })
+    // /* Text processing function
+    //     THis removes all symbols that are not alphanumeric and in doing so, removes all emojis
+    // */
+    // const symStripFunc = (dataIn)=>{
+    //     let tempString = dataIn.replace(/[^a-z0-9/',]/gmi, " ").replace(/\s+/g, " ");
+    //     //let tempString2 = tempString.replace(/[\,]+/g,"");
+    //     let tempString2 = tempString.replace(/,+/g,',');
+    //     return tempString2
+    // }
     
-    let noSymbols = symStripFunc(data)    //non alphanumeric symbols removed
-    let noEmojis = emojiStrip(noSymbols)  //removes emojis, might be redundant because symStringFunc did it but just as a double measure.
-    let commaSplitArray = noEmojis.split(",") //seperates comments at ',' and puts them in array
-    let emptiesRemovedArray = commaSplitArray.filter( elem => elem !== " ") //removes all empty comments left from removing emojis
-    console.log(emptiesRemovedArray)
-})
-/* Text processing function
-    THis removes all symbols that are not alphanumeric and in doing so, removes all emojis
-*/
-const symStripFunc = (dataIn)=>{
-    let tempString = dataIn.replace(/[^a-z0-9/',]/gmi, " ").replace(/\s+/g, " ");
-    //let tempString2 = tempString.replace(/[\,]+/g,"");
-    let tempString2 = tempString.replace(/,+/g,',');
-    return tempString2
-}
- 
 
 
 
-//helper func - seperate comments with comma
-
-//const celebChoice = 'cristiano'
-//let t = scraper.main_scrape_func('bhurnalcodes','s15koukie39',celebChoice)
-//console.log(t)
 
 
 

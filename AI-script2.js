@@ -14,35 +14,119 @@ const threshold = 0.9;
 // Load the model. Users optionally pass in a threshold and an array of
 // labels to include.
 toxicity.load(threshold).then(model => {
-  const sentences = [];
-  sentences = readFileFunc()
-  model.classify(sentences).then(predictions => {
-   
-    console.log(JSON.parse(predictions));
+  const sentences = ['you suck', 'Vamooossss ',
+  ' Focused ',
+  ' You are greatest of all time ',
+  ' Champion ',
+  ' You are greatest of all time ',
+  ' KING OF CHAMPIONS LEAGUE IS BACKKKK ',
+  ' This is a friendly reminder to not beat your sons ',
+  ' SIUUUUUUUM',
+  ' Cristiano aiuuuuum',
+  ' Skills ',
+  ' VAMOS CARALHOOOO ',
+  ' Forza Cris',
+  ' domani facci cantare ',
+  ' Vamos Porto ',
+  ' Portaci la coppa',
+  ' SIIIIIIUUUUUUUUU ',
+  ' Fai gol',
+  ' Portaci la Champions cristiano ',
+  ' Fuori le palle e portaci a casa questa coppa ',
+  ' 51 x 53 ',
+  " Seeking a pretty female to star in my PODCAST You don't have to be local to Los Angeles County",
+  ' shoot me a dm',
+  ' 2x8 ',
+  ' Vamooossss ',
+  ' You are greatest of all time ',
+  ' Focused ',
+  ' Skills ',
+  ' You are greatest of all time ',
+  ' Champion ',
+  ' KING OF CHAMPIONS LEAGUE IS BACKKKK ',
+  ' This is a friendly reminder to not beat your sons ',
+  ' SIUUUUUUUM',
+  ' Cristiano aiuuuuum',
+  ' Portaci la coppa',
+  ' VAMOS CARALHOOOO ',
+  ' Fai gol',
+  ' SIIIIIIUUUUUUUUU ',
+  ' Vamos Porto ',
+  ' vamos ',
+  ' impara l italiano',
+  ' FOCUSED ON THE CHAMPIONS',
+  ' Fenerbah e ',
+  ' STAY STRONG ',
+  ' Ti aspecto',
+  ' Ti aspecto chitemmuort 5 al fanta',
+  ' Come back stronger as always ',
+  ' ti aspecto',
+  ' Abisi sevsin ',
+  ' Never lose hope king ',
+  ' You re amazing and the best',
+  ' this would never change',
+  ' Primooo',
+  ' Acontece bora ganhar do Porto ',
+  ' Kiiiiiiiiiiiiiiiiiiiiiing CR7 ',
+  ' CR7 ',
+  ' Merih de ligt',
+  ' Come to Besiktas ',
+  ' Ti aspecto',
+  ' turk takimi tractor azarbayjan ',
+  ' Il migliore cristiano',
+  ' Wow',
+  ' CR7 Pessi',
+  ' Who is still single here ',
+  ' Who is single ',
+  ' Daje ',
+  ' TI ASPECTIAMO ',
+  ' Unlucky mate ',
+  ' Leccami sium',
+  ' Volta pra madrid',
+  ' Vamos cristiano ',
+  ' We are proud of you son',
+  ' you represent us well',
+  ' Ti aspectoq',
+  ' Lov You ',
+  ' Vamooossss ',
+  ' Skills ',
+  ' Focused ',
+  ' You are greatest of all time ',
+  ' KING OF CHAMPIONS LEAGUE IS BACKKKK ',
+  ' This is a friendly reminder to not beat your sons ',
+  ' SIUUUUUUUM',
+  ' Champion ',
+  ' Cristiano aiuuuuum',
+  ' VAMOS CARALHOOOO ',
+  ' SIIIIIIUUUUUUUUU ',
+  ' Fai gol',
+  ' Vamos Porto ',
+  ' Forza Cris',
+  ' domani facci cantare ',
+  ' Portaci la Champions cristiano ',
+  ' Fuori le palle e portaci a casa questa coppa ',
+  ' 2x8 ',
+  " Seeking a pretty female to star in my PODCAST You don't have to be local to Los Angeles County",
+  ' shoot me a dm',
+  ' 51 x 53 ',
+  ' You are greatest of all time ',
+  ' Come back stronger as always ',
+  ' STAY STRONG '];
+  
+ 
+
+model.classify(sentences).then(predictions => {
+    
+    // for(i=0;i<predictions.length;i++){
+    //     console.log(JSON.stringify(predictions[i].label))
+    //     console.log(JSON.stringify(predictions[i].results))
+    // }
+    console.log(JSON.stringify(predictions))
+    
     });
 });
 
-async function readFileFunc(){
-    fs.readFile('comments.txt','utf-8',(err,data)=>{
-        
-        let noSymbols = symStripFunc(data)    //non alphanumeric symbols removed
-        let noEmojis = emojiStrip(noSymbols)  //removes emojis, might be redundant because symStringFunc did it but just as a double measure.
-        let commaSplitArray = noEmojis.split(",") //seperates comments at ',' and puts them in array
-        let emptiesRemovedArray = commaSplitArray.filter( elem => elem !== " ") //removes all empty comments left from removing emojis
-        //console.log(emptiesRemovedArray)
-        return emptiesRemovedArray
-    })
-    return emptiesRemovedArray
-}
-/* Text processing function
-    THis removes all symbols that are not alphanumeric and in doing so, removes all emojis
-*/
-const symStripFunc = (dataIn)=>{
-    let tempString = dataIn.replace(/[^a-z0-9/',]/gmi, " ").replace(/\s+/g, " ");
-    //let tempString2 = tempString.replace(/[\,]+/g,"");
-    let tempString2 = tempString.replace(/,+/g,',');
-    return tempString2
-}
+
  
 
 /*   

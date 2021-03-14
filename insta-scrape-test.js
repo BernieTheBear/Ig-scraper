@@ -36,6 +36,7 @@ https://medium.com/@giltayar/javascript-asynchrony-and-async-await-in-selenium-w
 const {By,Builder,Key,util,withTagName,cssSelector,Select, WebDriver,until, promise,Promise,Map,map} = require('selenium-webdriver');
 const { elementIsDisabled } = require('selenium-webdriver/lib/until');
 const fs = require('fs')
+const chalk = require('chalk')
 
 
 async function main_scrape_func(un,pw,celebChoice){
@@ -45,10 +46,12 @@ async function main_scrape_func(un,pw,celebChoice){
       await driver.sleep(2000)
 
       const username = await driver.wait(until.elementLocated(By.name('username')),1000);
-      username.sendKeys('bhurnalcodes') 
+      //username.sendKeys('bhurnalcodes') 
+      username.sendKeys(un) 
       
       const password = await driver.wait(until.elementLocated(By.name('password')),1000);
-      password.sendKeys('s15koukie39') 
+      //password.sendKeys('s15koukie39') 
+      password.sendKeys(pw) 
 
       await driver.sleep(2000)
       const loginButton = await driver.wait(until.elementLocated(By.className('sqdOP  L3NKy   y3zKF')),2000);
@@ -93,7 +96,7 @@ async function main_scrape_func(un,pw,celebChoice){
       Goal:  Target UL of all comments - class: XQXOT pxf-y,
              Then in the UL, get all Mr508 elements, these are comments
 
-              Then */
+  */
   
 
           // const commentsList = await (await driver.findElement(By.xpath('/html/body/div[4]/div[2]/div/article/div[3]/div[1]/ul'))).getAttribute('innerText')
@@ -106,11 +109,11 @@ async function main_scrape_func(un,pw,celebChoice){
         const loadMore = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div'))
         loadMore.click();
 
-        await driver.sleep(2300)
+        await driver.sleep(2500)
         loadMore.click();
-        await driver.sleep(2300)
+        await driver.sleep(2500)
         loadMore.click();
-        await driver.sleep(2300)
+        await driver.sleep(2500)
         loadMore.click();
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
@@ -160,12 +163,13 @@ async function main_scrape_func(un,pw,celebChoice){
       let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a'))
       await driver.sleep(1500)
       nextPostArrow.click();
-      console.log(':::::GOING TO NEXT POST::::::')
+      
+      console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
     }
 //=================================================================
 /** CORE APP FUNCTIONALITY */
 
-
+  
   let scrapedComments = await scrapeCommentsFromPost()
   console.log(scrapedComments + ' length: ' + scrapedComments.length)
   writeToFile(scrapedComments)
@@ -173,7 +177,7 @@ async function main_scrape_func(un,pw,celebChoice){
   scrapedComments = await scrapeCommentsFromPost()
   writeToFile(scrapedComments)
   console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  return scrapedComments;
+  // //return scrapedComments;
 //-------------------------------
 }
 //main_scrape_func()
