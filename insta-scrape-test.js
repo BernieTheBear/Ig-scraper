@@ -177,7 +177,7 @@ async function main_scrape_func(un,pw,celebChoice){
   scrapedComments = await scrapeCommentsFromPost()
   writeToFile(scrapedComments)
   console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  // //return scrapedComments;
+  return scrapedComments;
 //-------------------------------
 }
 //main_scrape_func()

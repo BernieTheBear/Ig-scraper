@@ -24,7 +24,7 @@ const app = express()
 //MAIN SCRAPE FUNCTION
 const celebChoice = 'cristiano'
 let t = scraper.main_scrape_func(UN,PW,celebChoice)
-console.log(t)
+console.log('this is comments from app.js')
 
 
 
