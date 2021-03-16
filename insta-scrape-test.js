@@ -161,7 +161,7 @@ async function main_scrape_func(un,pw,celebChoice){
      /** function that click next arrow to get next post and begin scrape again */
     async function nextPost (){
       let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a'))
-      await driver.sleep(1500)
+      await driver.sleep(2500)
       nextPostArrow.click();
       
       console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
@@ -173,7 +173,9 @@ async function main_scrape_func(un,pw,celebChoice){
   let scrapedComments = await scrapeCommentsFromPost()
   console.log(scrapedComments + ' length: ' + scrapedComments.length)
   writeToFile(scrapedComments)
+  await driver.sleep(2500)
   nextPost();
+  await driver.sleep(2500)
   scrapedComments = await scrapeCommentsFromPost()
   writeToFile(scrapedComments)
   console.log(scrapedComments + ' length: ' + scrapedComments.length)

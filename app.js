@@ -15,19 +15,15 @@ var PW ='kirklandExpo';
 const app = express()
 
 // respond with sentiment rating when url with specific celeb choice is requested
-    // app.get(`/${celebChoice}`, function (req, res) {
+    // app.get(`search/${celebChoice}`, function (req, res) {
     //     sentimentRating = scraper.main_scrape_func(UN,PW,celebChoice)
-    //     res.send()//return sentiment rating
+    //     res.JSON()//return sentiment rating
     //   })
 
 
 //MAIN SCRAPE FUNCTION
-const celebChoice = 'cristiano'
-let t = scraper.main_scrape_func(UN,PW,celebChoice)
-console.log('this is comments from app.js')
-
-
-
+// const celebChoice = 'cristiano'
+// let t = scraper.main_scrape_func(UN,PW,celebChoice)
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/

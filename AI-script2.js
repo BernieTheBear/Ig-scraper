@@ -15,7 +15,7 @@ const threshold = 0.9;
 // labels to include.
 toxicityMod.load(threshold).then(model => {
   const sentences = ['you suck', 'Vamooossss ',
-  ' Focused','loser','dummy','beautiful',
+  ' Focused','loser','dummy','beautiful','you are great',
   ];
   
   /* 6th object is toxicity object
@@ -91,7 +91,7 @@ console.log(JSON.parse(predictions));
 
 
 
-*/
+
 /*
 https://www.kdnuggets.com/2020/03/tensorflow-keras-tokenization-text-data-prep.html
 https://github.com/tensorflow/tfjs-models/blob/master/toxicity/demo/index.js
