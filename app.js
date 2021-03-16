@@ -22,8 +22,8 @@ const app = express()
 
 
 //MAIN SCRAPE FUNCTION
-// const celebChoice = 'cristiano'
-// let t = scraper.main_scrape_func(UN,PW,celebChoice)
+const celebChoice = 'cristiano'
+let t = scraper.main_scrape_func(UN,PW,celebChoice)
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/

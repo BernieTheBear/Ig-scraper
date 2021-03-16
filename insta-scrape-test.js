@@ -86,10 +86,23 @@ async function main_scrape_func(un,pw,celebChoice){
       //clicking first post
       await driver.sleep(2000)
       const z = await driver.findElement(By.css('#react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1)'))
-      z.click()
+      await z.click()
       
-     
-
+      
+      
+      async function testRun(num){
+        let i = 0
+          while(i < num){
+            let comments = await scrapeCommentsFromPost(driver)
+            driver.sleep(3000)
+            console.log(comments)
+            await writeToFile(comments)
+            nextPost(driver)
+            i++;
+          }
+      }
+       await testRun(2)
+}
 //=================================================================================================
      
   /*TARGETING COMMENTS SECTION
@@ -102,11 +115,12 @@ async function main_scrape_func(un,pw,celebChoice){
           // const commentsList = await (await driver.findElement(By.xpath('/html/body/div[4]/div[2]/div/article/div[3]/div[1]/ul'))).getAttribute('innerText')
           // console.log(commentsList)
       
-     async function scrapeCommentsFromPost () {   
+     async function scrapeCommentsFromPost (driver) {   
 
           //clicking load more
-        await driver.sleep(2300)
-        const loadMore = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div'))
+        await driver.sleep(5000)
+        const loadMore = await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div')),10000)
+        
         loadMore.click();
 
         await driver.sleep(2500)
@@ -115,10 +129,11 @@ async function main_scrape_func(un,pw,celebChoice){
         loadMore.click();
         await driver.sleep(2500)
         loadMore.click();
+        await driver.sleep(2500)
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));
-      
+        
         //** Returns an array of promises -specifically getting all elements that ar just Mr508, these are the comments */
         let commentListChildren = await commentListRootPromise.findElements(By.className('Mr508'))
 
@@ -135,7 +150,7 @@ async function main_scrape_func(un,pw,celebChoice){
                 //innerText = text; FOR TESTING
                 return text
             })
-            //console.log('this is innnerText: ' + innerText)- FOR TESTING
+            //console.log('this is innnerText: ' + innerText)- FOR TESTINGf
             arrayComments.push(innerText)
         }
        
@@ -154,35 +169,45 @@ async function main_scrape_func(un,pw,celebChoice){
             }
           })
         })
+        console.log(chalk.red(':::::COMMENTS WRITTEN TO FILE::::::'))
      }
 //------------------------------------------------------------------
 //==================================================================
 
      /** function that click next arrow to get next post and begin scrape again */
-    async function nextPost (){
-      let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a'))
+    async function nextPost (driver){
+      let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow'))
       await driver.sleep(2500)
       nextPostArrow.click();
       
+      console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
+    }
+
+    async function nextPost2(driver){
+      await driver.sleep(2500)
+      driver.sendKeys(Key.RIGHT)
+
       console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
     }
 //=================================================================
 /** CORE APP FUNCTIONALITY */
 
   
-  let scrapedComments = await scrapeCommentsFromPost()
-  console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  writeToFile(scrapedComments)
-  await driver.sleep(2500)
-  nextPost();
-  await driver.sleep(2500)
-  scrapedComments = await scrapeCommentsFromPost()
-  writeToFile(scrapedComments)
-  console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  return scrapedComments;
+
+  
+  // let scrapedComments = await scrapeCommentsFromPost()
+  // console.log(scrapedComments + ' length: ' + scrapedComments.length)
+  // writeToFile(scrapedComments)
+  // await driver.sleep(2500)
+  // nextPost();
+  // await driver.sleep(2500)
+  // scrapedComments = await scrapeCommentsFromPost()
+  // writeToFile(scrapedComments)
+  // console.log(scrapedComments + ' length: ' + scrapedComments.length)
+  // return scrapedComments;
 //-------------------------------
-}
-//main_scrape_func()
+
+
 //======================================================
 
 
