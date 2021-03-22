@@ -5,6 +5,9 @@ const fs = require('fs')
 const emojiStrip = require('emoji-strip');
 const e = require('express');
 const { until } = require('selenium-webdriver');
+const { run } = require('./insta-scrape-test.js');
+
+
 
 var UN ='SentiScrape';
 var PW ='kirklandExpo';
@@ -23,7 +26,17 @@ const app = express()
 
 //MAIN SCRAPE FUNCTION
 const celebChoice = 'cristiano'
-let t = scraper.main_scrape_func(UN,PW,celebChoice)
+//scraper.main_scrape_func()
+// scraper.main_scrape_func(UN,PW,celebChoice).then({
+//     console.log(typeof data)
+// })
+
+ function test (){
+  let t = Promise.resolve(scraper.run(UN,PW,celebChoice))
+  t.then(data => console.log('This is printing from app.js ' + data))
+}
+
+test()
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/

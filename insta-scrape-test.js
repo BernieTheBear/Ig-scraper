@@ -37,6 +37,7 @@ const {By,Builder,Key,util,withTagName,cssSelector,Select, WebDriver,until, prom
 const { elementIsDisabled } = require('selenium-webdriver/lib/until');
 const fs = require('fs')
 const chalk = require('chalk')
+let comments = []
 
 
 async function main_scrape_func(un,pw,celebChoice){
@@ -54,7 +55,7 @@ async function main_scrape_func(un,pw,celebChoice){
       password.sendKeys(pw) 
 
       await driver.sleep(2000)
-      const loginButton = await driver.wait(until.elementLocated(By.className('sqdOP  L3NKy   y3zKF')),2000);
+      const loginButton = await driver.wait(until.elementLocated(By.css('#loginForm > div > div:nth-child(3) > button')),2000);
       loginButton.click();
 
       // //to clear save login info by clicking "not now"
@@ -88,20 +89,19 @@ async function main_scrape_func(un,pw,celebChoice){
       const z = await driver.findElement(By.css('#react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1)'))
       await z.click()
       
-      
-      
-      async function testRun(num){
+      async function scrapeComments(num){
         let i = 0
           while(i < num){
-            let comments = await scrapeCommentsFromPost(driver)
+            comments = await scrapeCommentsFromPost(driver)
             driver.sleep(3000)
-            console.log(comments)
+            //console.log(comments)
             await writeToFile(comments)
             nextPost(driver)
             i++;
           }
       }
-       await testRun(2)
+       await scrapeComments(2) //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
+       return comments;
 }
 //=================================================================================================
      
@@ -117,19 +117,8 @@ async function main_scrape_func(un,pw,celebChoice){
       
      async function scrapeCommentsFromPost (driver) {   
 
-          //clicking load more
-        await driver.sleep(5000)
-        const loadMore = await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div')),10000)
-        
-        loadMore.click();
-
-        await driver.sleep(2500)
-        loadMore.click();
-        await driver.sleep(2500)
-        loadMore.click();
-        await driver.sleep(2500)
-        loadMore.click();
-        await driver.sleep(2500)
+          //clicks '+' to load more another set of comments
+        await loadMore(driver,4);
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));
@@ -174,7 +163,7 @@ async function main_scrape_func(un,pw,celebChoice){
 //------------------------------------------------------------------
 //==================================================================
 
-     /** function that click next arrow to get next post and begin scrape again */
+     /** function that clicks next arrow to get next post and begin scrape again */
     async function nextPost (driver){
       let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow'))
       await driver.sleep(2500)
@@ -182,37 +171,38 @@ async function main_scrape_func(un,pw,celebChoice){
       
       console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
     }
+    /* this alternate version of nextPost using the RIGHT arrow key to visit next post in case the right post arrow is not located*/
+      // async function nextPost2(driver){
+      //   await driver.sleep(2500)
+      //   driver.sendKeys(Key.RIGHT)
+      // console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
+      // }
 
-    async function nextPost2(driver){
-      await driver.sleep(2500)
-      driver.sendKeys(Key.RIGHT)
-
-      console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
+    /** Load more comments on post */
+    async function loadMore(driver,numOfComments){
+      i = 0;
+      while(i < numOfComments){
+        await driver.sleep(2000)
+        const loadMore = await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div')),10000)
+        i++;
+      }
+      console.log(chalk.red(':::::LOADING COMMENTS::::::'))
     }
 //=================================================================
 /** CORE APP FUNCTIONALITY */
 
-  
+ async function run(UN,PW,celebChoice){
+    let r = await main_scrape_func(UN,PW,celebChoice)
+    return r
+ } 
+ 
 
-  
-  // let scrapedComments = await scrapeCommentsFromPost()
-  // console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  // writeToFile(scrapedComments)
-  // await driver.sleep(2500)
-  // nextPost();
-  // await driver.sleep(2500)
-  // scrapedComments = await scrapeCommentsFromPost()
-  // writeToFile(scrapedComments)
-  // console.log(scrapedComments + ' length: ' + scrapedComments.length)
-  // return scrapedComments;
-//-------------------------------
 
 
 //======================================================
 
 
-
 module.exports = {
-    main_scrape_func: main_scrape_func,
+    run: run,
+    
 }
-  
