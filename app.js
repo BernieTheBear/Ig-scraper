@@ -1,5 +1,6 @@
 
 const scraper = require('./insta-scrape-test.js')
+//const AI = require('./AI-script2.js')
 const express = require('express')
 const fs = require('fs')
 const emojiStrip = require('emoji-strip');
@@ -25,18 +26,44 @@ const app = express()
 
 
 //MAIN SCRAPE FUNCTION
-const celebChoice = 'cristiano'
-//scraper.main_scrape_func()
-// scraper.main_scrape_func(UN,PW,celebChoice).then({
-//     console.log(typeof data)
-// })
+const celebChoice = 'kyliejenner'
+scraper.runScraper(UN,PW,celebChoice)
+// function getScrapedComments (){
+    
+//     scraper.runScraper(UN,PW,celebChoice).then((data)=>{
+//         //console.log(data)
+//         cleanedComments = cleanComments(data)
+//         AI.makePrediction(cleanedComments).then((predictions)=>{
+//             console.log(predictions)
+//         })
+        
 
- function test (){
-  let t = Promise.resolve(scraper.run(UN,PW,celebChoice))
-  t.then(data => console.log('This is printing from app.js ' + data))
+//     })
+// }
+// getScrapedComments()
+
+
+/* COMMENT PREPROCESSING BEFORE PASSING TO AI */
+function cleanComments(comments){
+    let noSymbols = symStripFunc(JSON.stringify(comments))    //non alphanumeric symbols removed
+    let noEmojis = emojiStrip(noSymbols)  //removes emojis, might be redundant because symStringFunc did it but just as a double measure.
+    let commaSplitArray = noEmojis.split(",") //seperates comments at ',' and puts them in array
+    let emptiesRemovedArray = commaSplitArray.filter( elem => elem !== " ") //removes all empty comments left from removing emojis
+    //console.log(emptiesRemovedArray)
+    return(emptiesRemovedArray)
+}
+/* Text processing function This removes all symbols that are not alphanumeric and in doing so, removes all emojis*/
+function symStripFunc (dataIn) {
+        let tempString = dataIn.replace(/[^a-z0-9/',]/gmi, " ").replace(/\s+/g, " ");
+        //let tempString2 = tempString.replace(/[\,]+/g,"");
+        let tempString2 = tempString.replace(/,+/g,',');
+        return tempString2
 }
 
-test()
+
+
+
+
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/

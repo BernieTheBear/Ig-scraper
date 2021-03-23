@@ -47,23 +47,23 @@ async function main_scrape_func(un,pw,celebChoice){
       await driver.sleep(2000)
 
       const username = await driver.wait(until.elementLocated(By.name('username')),1000);
-      //username.sendKeys('bhurnalcodes') 
       username.sendKeys(un) 
+      //username.sendKeys('bhurnalcodes') 
       
       const password = await driver.wait(until.elementLocated(By.name('password')),1000);
-      //password.sendKeys('s15koukie39') 
       password.sendKeys(pw) 
+      //password.sendKeys('s15koukie39') 
 
       await driver.sleep(2000)
       const loginButton = await driver.wait(until.elementLocated(By.css('#loginForm > div > div:nth-child(3) > button')),2000);
       loginButton.click();
 
-      // //to clear save login info by clicking "not now"
+    //to clear save login info by clicking "not now"
         await driver.sleep(2000)
-        const saveLoginInfoButton =  await driver.wait(until.elementLocated(By.className('cmbtv')),3000);
+        const saveLoginInfoButton = await driver.wait(until.elementLocated(By.className('cmbtv')),3000);
         await saveLoginInfoButton.click();
 
-      //to clear turn on post notif button
+    //to clear turn on post notif button
       await driver.sleep(1000)
       const postNotifButton =  await driver.wait(until.elementLocated(By.className('aOOlW   HoLwm ')));
       await postNotifButton.click();
@@ -84,7 +84,7 @@ async function main_scrape_func(un,pw,celebChoice){
       await driver.get(`https://www.instagram.com/${celebChoice}/`);
       
 
-      //clicking first post
+    //clicking first post
       await driver.sleep(2000)
       const z = await driver.findElement(By.css('#react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1)'))
       await z.click()
@@ -92,15 +92,21 @@ async function main_scrape_func(un,pw,celebChoice){
       async function scrapeComments(num){
         let i = 0
           while(i < num){
-            comments = await scrapeCommentsFromPost(driver)
-            driver.sleep(3000)
+            //comments = await scrapeCommentsFromPost(driver)
+            let postNum = 'POST NUM: ' + i
+            let postComments = await scrapeCommentsFromPost(driver)
+            let numberedScrape = postNum + '~~~~~' + postComments
+            let tempArr = [numberedScrape]
+            comments = tempArr
+            driver.sleep(Math.random() * 2000)
             //console.log(comments)
             await writeToFile(comments)
             nextPost(driver)
             i++;
           }
       }
-       await scrapeComments(2) //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
+       await scrapeComments(9) //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
+       console.log(chalk.red(':::::DONE::::::'))
        return comments;
 }
 //=================================================================================================
@@ -117,8 +123,8 @@ async function main_scrape_func(un,pw,celebChoice){
       
      async function scrapeCommentsFromPost (driver) {   
 
-          //clicks '+' to load more another set of comments
-        await loadMore(driver,4);
+        //clicks '+' to load more another set of comments -> (driver,numOfCommentSets)
+        await loadMore(driver,34);
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));
@@ -139,12 +145,13 @@ async function main_scrape_func(un,pw,celebChoice){
                 //innerText = text; FOR TESTING
                 return text
             })
-            //console.log('this is innnerText: ' + innerText)- FOR TESTINGf
+            //console.log('this is innnerText: ' + innerText)- FOR TESTING
             arrayComments.push(innerText)
         }
        
         //console.log('m length is '+ arrayComments.length)
         //console.log('this is arrayComments contents: ' + arrayComments) //checking of of array contents
+        
         return arrayComments;
     }
 //--------------------------------------------------------------  
@@ -163,12 +170,11 @@ async function main_scrape_func(un,pw,celebChoice){
 //------------------------------------------------------------------
 //==================================================================
 
-     /** function that clicks next arrow to get next post and begin scrape again */
+  /** function that clicks next arrow to get next post and begin scrape again */
     async function nextPost (driver){
       let nextPostArrow = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow'))
       await driver.sleep(2500)
       nextPostArrow.click();
-      
       console.log(chalk.red(':::::GOING TO NEXT POST::::::'))
     }
     /* this alternate version of nextPost using the RIGHT arrow key to visit next post in case the right post arrow is not located*/
@@ -179,11 +185,12 @@ async function main_scrape_func(un,pw,celebChoice){
       // }
 
     /** Load more comments on post */
-    async function loadMore(driver,numOfComments){
+  async function loadMore(driver,commentSets){
       i = 0;
-      while(i < numOfComments){
+      while(i < commentSets){
         await driver.sleep(2000)
         const loadMore = await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > li > div')),10000)
+        loadMore.click()
         i++;
       }
       console.log(chalk.red(':::::LOADING COMMENTS::::::'))
@@ -191,9 +198,9 @@ async function main_scrape_func(un,pw,celebChoice){
 //=================================================================
 /** CORE APP FUNCTIONALITY */
 
- async function run(UN,PW,celebChoice){
-    let r = await main_scrape_func(UN,PW,celebChoice)
-    return r
+ async function runScraper(UN,PW,celebChoice){
+    let returnedComments = await main_scrape_func(UN,PW,celebChoice)
+    return returnedComments
  } 
  
 
@@ -203,6 +210,6 @@ async function main_scrape_func(un,pw,celebChoice){
 
 
 module.exports = {
-    run: run,
+    runScraper: runScraper,
     
 }
