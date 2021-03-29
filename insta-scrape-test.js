@@ -5,27 +5,17 @@ https://stackoverflow.com/questions/59824750/scraping-all-comments-under-an-inst
 https://github.com/arc298/instagram-scraper
 https://stackoverflow.com/questions/26400943/selenium-webdriver-how-to-select-records-from-table-by-fetching-excel-input?rq=1
 https://stackoverflow.com/questions/41405697/how-to-extract-instagram-data
-
 https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_By.html
-
 https://www.youtube.com/watch?v=iJGvYBH9mcY&ab_channel=PythonSimplified
-
-
-
 SLEEP
 https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/ie_exports_Driver.html#sleep
   Ex.   await driver.sleep(5000)
-
-
   Attribute selectors
   5.8 Attribute selectors
 CSS 2.1 allows authors to specify rules that match elements which have certain attributes defined in the source document.
 https://www.w3.org/TR/CSS2/selector.html#adjacent-selectors
-
-
 SELECTING CHILDREN OF NODE
 https://stackoverflow.com/questions/5119655/xpath-to-get-all-child-nodes-elements-comments-and-text-without-parent/5119937
-
 Await examples
 https://medium.com/@giltayar/javascript-asynchrony-and-async-await-in-selenium-webdriver-tests-a89924421f65
 */
@@ -72,7 +62,6 @@ async function main_scrape_func(un,pw,celebChoice){
       //once logged in, go directly to celeb profile via url. 
       /* The other option here is the manually enter the celebs name in the search bar and click the first result. I tried this and it was tricky 
           This was the code. It would enter the celeb name and then hit enter, then enter again, this would go to the actual celebs page
-
               // const searchButton =  await driver.wait(until.elementLocated(By.className('XTCLo x3qfX')));
               // await searchButton.sendKeys('Kim Kardashian',Key.RETURN)
               // driver.sleep(1000)
@@ -105,7 +94,7 @@ async function main_scrape_func(un,pw,celebChoice){
             i++;
           }
       }
-       await scrapeComments(9) //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
+       await scrapeComments(2) //POST NUM HERE !!! //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
        console.log(chalk.red(':::::DONE::::::'))
        return comments;
 }
@@ -114,7 +103,6 @@ async function main_scrape_func(un,pw,celebChoice){
   /*TARGETING COMMENTS SECTION
       Goal:  Target UL of all comments - class: XQXOT pxf-y,
              Then in the UL, get all Mr508 elements, these are comments
-
   */
   
 
@@ -124,7 +112,7 @@ async function main_scrape_func(un,pw,celebChoice){
      async function scrapeCommentsFromPost (driver) {   
 
         //clicks '+' to load more another set of comments -> (driver,numOfCommentSets)
-        await loadMore(driver,34);
+        await loadMore(driver,2); //ADJUST NUM OF COMMENT SETS HERE!!
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));

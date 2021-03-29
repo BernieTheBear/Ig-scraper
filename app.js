@@ -1,12 +1,13 @@
 
 const scraper = require('./insta-scrape-test.js')
-//const AI = require('./AI-script2.js')
+const AI = require('./AI-script2.js')
 const express = require('express')
 const fs = require('fs')
 const emojiStrip = require('emoji-strip');
 const e = require('express');
 const { until } = require('selenium-webdriver');
 const { run } = require('./insta-scrape-test.js');
+const AIScript2 = require('./AI-script2.js');
 
 
 
@@ -27,20 +28,24 @@ const app = express()
 
 //MAIN SCRAPE FUNCTION
 const celebChoice = 'kyliejenner'
-scraper.runScraper(UN,PW,celebChoice)
-// function getScrapedComments (){
+//scraper.runScraper(UN,PW,celebChoice)
+async function getScrapedComments (UN,PW,celebChoice){
     
-//     scraper.runScraper(UN,PW,celebChoice).then((data)=>{
-//         //console.log(data)
-//         cleanedComments = cleanComments(data)
-//         AI.makePrediction(cleanedComments).then((predictions)=>{
-//             console.log(predictions)
-//         })
-        
-
-//     })
-// }
-// getScrapedComments()
+    let data = await scraper.runScraper(UN,PW,celebChoice)
+    cleanedComments = cleanComments(data)
+    console.log(cleanedComments)
+    let results = await AI.runAI(cleanedComments)
+    console.log(JSON.stringify(results))
+    // scraper.runScraper(UN,PW,celebChoice).then((data)=>{
+    //     console.log(data)
+    //     cleanedComments = cleanComments(data)
+    //     console.log(cleanedComments)
+    //     // AI.makePrediction(cleanedComments).then((predictions)=>{
+    //     //     console.log(predictions)
+    //     // })
+    // })
+}
+getScrapedComments(UN,PW,celebChoice)
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI */
@@ -92,7 +97,6 @@ function symStripFunc (dataIn) {
 
 
 /* RESOURCES AND NOTES 
-
 https://github.com/nizaroni/emoji-strip
 https://stackoverflow.com/questions/6456864/why-does-node-js-fs-readfile-return-a-buffer-instead-of-string
 https://stackoverflow.com/questions/19245897/regex-to-remove-multiple-comma-and-spaces-from-string-in-javascript
@@ -101,5 +105,4 @@ https://stackoverflow.com/questions/40101734/regex-to-add-a-new-line-break-after
 https://stackoverflow.com/questions/19245897/regex-to-remove-multiple-comma-and-spaces-from-string-in-javascript
 https://salesforce.stackexchange.com/questions/301150/remove-multiple-commas-between-two-strings
 https://nodejs.org/en/knowledge/file-system/how-to-read-files-in-nodejs/
-
 */

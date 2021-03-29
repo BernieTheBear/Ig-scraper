@@ -10,31 +10,85 @@ const emojiStrip = require('emoji-strip')
 
 // The minimum prediction confidence.
 const threshold = 0.9;
+let trueToxicCount=0;
+let falseToxicCount=0;
+let unclassifiedComments=0;
+
+const sentences = [' POST NUM 1 Ohhh love',
+'Coloca no enjoei que j quero',
+'Lblblb',
+'MIRACULOUSSS',
+'Bitch',
+'Lb3x3',
+'Lbbbl',
+'INSTANTLY FIRST CBCBCBCBCBCB ',
+'Loser ',
+'Spit on me',
+'like ',
+'if i should deIete my IG ',
+'first',
+'Oh to be rich',
+];
+
  
 // Load the model. Users optionally pass in a threshold and an array of
 // labels to include.
-toxicityMod.load(threshold).then(model => {
-  const sentences = ['you suck', 'Vamooossss ',
-  ' Focused','loser','dummy','beautiful','you are great',
-  ];
-  
-  /* 6th object is toxicity object
-     to get results use .results on the toxicityObject
-  */
-    model.classify(sentences).then(predictions => {
-        let arrayOfPredictions = []
-        
-        for(i=0;i<predictions.length;i++){
-          arrayOfPredictions.push((predictions[i]))
-      }
-      let toxicityObj = arrayOfPredictions[6]
-      let results = toxicityObj.results
-      console.log(results)
-      
-    });
 
-});
- 
+async function makePrediction(comments){
+
+    let model = await toxicityMod.load(threshold)
+    let predictions = await model.classify(comments)
+    let arrayOfPredictions = []
+    for(i=0;i<predictions.length;i++){
+      arrayOfPredictions.push((predictions[i]))
+    }
+    let toxicityObj = arrayOfPredictions[6]
+    let results = toxicityObj.results
+    return results
+}
+  async function runAI(data){
+    let results = await makePrediction(data)
+    tallyResults(results)
+  }
+
+  /*This function takes raw prediction results and abstracts out the 'true' and 'false' values by using the 'Match' property on each nested object
+    Ex. results[i].match will either be 'true' or 'false' depending on what the model classified the comment as  */
+  function tallyResults(results){
+    for(i=0;i<results.length;i++){
+       if(results[i].match == true){
+          trueToxicCount+=1
+       } else if(results[i].match == false){
+         falseToxicCount+=1
+       } else {
+         unclassifiedComments+=1 //for comments where match = null -> meaning unclassified as toxic or not
+       }
+
+    }
+    let toxicPercentage =  (trueToxicCount / results.length)
+    let nonToxicPercentage = (falseToxicCount / results.length)
+   
+    // console.log('Toxic Percentage: ' + toxicPercentage + '% over ' + trueToxicCount +'/'+ results.length + ' total comments')
+    // console.log('Non Toxic Percentage: ' + nonToxicPercentage + '% over '+ falseToxicCount +'/'+ results.length + ' total comments')
+    // console.log('Total unclassified: ' + unclassifiedComments + ' out of ' + results.length + ' total comments')
+
+    //encapsulate results into an object and return
+    let calculatedResults = {
+       toxicPercentage: toxicPercentage,
+       nonToxicPercentage: nonToxicPercentage,
+       unclassifiedComments: unclassifiedComments
+    }
+    return calculatedResults;  //return out to be used in app.js
+  }
+  
+  
+  //runAI(sentences) -> for testing by running from this file directly
+  
+  
+  module.exports = {
+      runAI: runAI
+  }
+
+
 
 /*   
 
