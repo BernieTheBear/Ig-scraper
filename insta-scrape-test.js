@@ -94,7 +94,7 @@ async function main_scrape_func(un,pw,celebChoice){
             i++;
           }
       }
-       await scrapeComments(2) //POST NUM HERE !!! //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
+       await scrapeComments(1) //POST NUM HERE !!! //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
        console.log(chalk.red(':::::DONE::::::'))
        return comments;
 }
@@ -112,7 +112,7 @@ async function main_scrape_func(un,pw,celebChoice){
      async function scrapeCommentsFromPost (driver) {   
 
         //clicks '+' to load more another set of comments -> (driver,numOfCommentSets)
-        await loadMore(driver,2); //ADJUST NUM OF COMMENT SETS HERE!!
+        await loadMore(driver,1); //ADJUST NUM OF COMMENT SETS HERE!!
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));

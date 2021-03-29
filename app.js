@@ -28,24 +28,27 @@ const app = express()
 
 //MAIN SCRAPE FUNCTION
 const celebChoice = 'kyliejenner'
+
 //scraper.runScraper(UN,PW,celebChoice)
-async function getScrapedComments (UN,PW,celebChoice){
+async function getAndProcessComments (UN,PW,celebChoice){
     
     let data = await scraper.runScraper(UN,PW,celebChoice)
     cleanedComments = cleanComments(data)
     console.log(cleanedComments)
     let results = await AI.runAI(cleanedComments)
-    console.log(JSON.stringify(results))
-    // scraper.runScraper(UN,PW,celebChoice).then((data)=>{
-    //     console.log(data)
-    //     cleanedComments = cleanComments(data)
-    //     console.log(cleanedComments)
-    //     // AI.makePrediction(cleanedComments).then((predictions)=>{
-    //     //     console.log(predictions)
-    //     // })
-    // })
+    return(JSON.stringify(results))
 }
-getScrapedComments(UN,PW,celebChoice)
+async function run2(){
+    let r = await getAndProcessComments(UN,PW,celebChoice)
+    return r
+}
+console.log(run2())
+// async function test(cleanedComments){
+//     let results = await AI.runAI(cleanedComments)
+//     console.log(JSON.stringify(results))
+// }
+// test(cleanedComments)
+
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI */
