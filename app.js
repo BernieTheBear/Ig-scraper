@@ -28,19 +28,29 @@ const app = express()
 // //MAIN SCRAPE FUNCTION
 const celebChoice = 'kyliejenner'
 
-// scraper.runScraper(UN,PW,celebChoice)
-async function getAndProcessComments (UN,PW,celebChoice){
-    
-    let data = await scraper.runScraper(UN,PW,celebChoice)
-    cleanedComments = cleanComments(data)
-    console.log(cleanedComments)
-    let results = await AI.runAI(cleanedComments)
-    return results
+//check last modified date
+function lastModified (file){
+    fs.readFile(file,'utf-8',(err,data)=>{
+        let t = data.split(' ')
+        let r = t.slice(2,5)
+        console.log(r)
+    })
 }
+lastModified('comments.txt')
 
-getAndProcessComments(UN,PW,celebChoice).then((results)=>{
-    console.log(results)
-})
+
+// async function getAndProcessComments (UN,PW,celebChoice){
+    
+//     let data = await scraper.runScraper(UN,PW,celebChoice)
+//     cleanedComments = cleanComments(data)
+//     console.log(cleanedComments)
+//     let results = await AI.runAI(cleanedComments)
+//     return results
+// }
+
+// getAndProcessComments(UN,PW,celebChoice).then((results)=>{
+//     console.log(results)
+// })
 
 
 

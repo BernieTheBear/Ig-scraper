@@ -80,7 +80,7 @@ async function main_scrape_func(un,pw,celebChoice){
     
     //get date of latest post and write to comments.txt 
       let latestPostDate =  await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.k_Q0X.I0_K8.NnvRN > a > time'))).getAttribute('title')
-      let latestPostDateAsString = 'LATEST POST: ' + latestPostDate + '~~~~'
+      let latestPostDateAsString = 'LATEST POST: ' + latestPostDate + ' '
       fs.appendFile('comments.txt',latestPostDateAsString,(err)=>{
         if(err){
           console.log(err)
