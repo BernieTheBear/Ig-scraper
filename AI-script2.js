@@ -9,26 +9,19 @@ const emojiStrip = require('emoji-strip')
 
 
 // The minimum prediction confidence.
-const threshold = 0.9;
+const threshold = 0.65;
 let trueToxicCount=0;
 let falseToxicCount=0;
 let unclassifiedComments=0;
 
-const sentences = [' POST NUM 1 Ohhh love',
-'Coloca no enjoei que j quero',
-'Lblblb',
-'MIRACULOUSSS',
-'Bitch',
-'Lb3x3',
-'Lbbbl',
-'INSTANTLY FIRST CBCBCBCBCBCB ',
-'Loser ',
-'Spit on me',
-'like ',
-'if i should deIete my IG ',
-'first',
-'Oh to be rich',
-];
+// const sentences = [ ' POST NUM 0 I literally use this every morning and night best formula',
+// 'The best ',
+// 'Finally smth interesting ',
+// 'Dang',
+// 'FIRSTT ',
+// 'Love you',
+// ' yesssssurrrr earlyyyyy',
+// ];
 
  
 // Load the model. Users optionally pass in a threshold and an array of
@@ -48,7 +41,7 @@ async function makePrediction(comments){
 }
   async function runAI(data){
     let results = await makePrediction(data)
-    tallyResults(results)
+    return tallyResults(results)
   }
 
   /*This function takes raw prediction results and abstracts out the 'true' and 'false' values by using the 'Match' property on each nested object
@@ -64,12 +57,12 @@ async function makePrediction(comments){
        }
 
     }
-    let toxicPercentage =  (trueToxicCount / results.length)
-    let nonToxicPercentage = (falseToxicCount / results.length)
+    let toxicPercentage =  ((trueToxicCount / results.length)*100)
+    let nonToxicPercentage = ((falseToxicCount / results.length)*100)
    
-    // console.log('Toxic Percentage: ' + toxicPercentage + '% over ' + trueToxicCount +'/'+ results.length + ' total comments')
-    // console.log('Non Toxic Percentage: ' + nonToxicPercentage + '% over '+ falseToxicCount +'/'+ results.length + ' total comments')
-    // console.log('Total unclassified: ' + unclassifiedComments + ' out of ' + results.length + ' total comments')
+    console.log('Toxic Percentage: ' + toxicPercentage + '% over ' + trueToxicCount +'/'+ results.length + ' total comments')
+    console.log('Non Toxic Percentage: ' + nonToxicPercentage + '% over '+ falseToxicCount +'/'+ results.length + ' total comments')
+    console.log('Total unclassified: ' + unclassifiedComments + ' out of ' + results.length + ' total comments')
 
     //encapsulate results into an object and return
     let calculatedResults = {
@@ -81,7 +74,9 @@ async function makePrediction(comments){
   }
   
   
-  //runAI(sentences) -> for testing by running from this file directly
+  // runAI(sentences).then((results)=>{
+  //   console.log(results)
+  // })
   
   
   module.exports = {

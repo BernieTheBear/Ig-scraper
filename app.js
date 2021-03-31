@@ -15,7 +15,6 @@ var UN ='SentiScrape';
 var PW ='kirklandExpo';
 
 
-
 //REQUEST ROUTING
 const app = express()
 
@@ -26,28 +25,22 @@ const app = express()
     //   })
 
 
-//MAIN SCRAPE FUNCTION
+// //MAIN SCRAPE FUNCTION
 const celebChoice = 'kyliejenner'
 
-//scraper.runScraper(UN,PW,celebChoice)
+// scraper.runScraper(UN,PW,celebChoice)
 async function getAndProcessComments (UN,PW,celebChoice){
     
     let data = await scraper.runScraper(UN,PW,celebChoice)
     cleanedComments = cleanComments(data)
     console.log(cleanedComments)
     let results = await AI.runAI(cleanedComments)
-    return(JSON.stringify(results))
+    return results
 }
-async function run2(){
-    let r = await getAndProcessComments(UN,PW,celebChoice)
-    return r
-}
-console.log(run2())
-// async function test(cleanedComments){
-//     let results = await AI.runAI(cleanedComments)
-//     console.log(JSON.stringify(results))
-// }
-// test(cleanedComments)
+
+getAndProcessComments(UN,PW,celebChoice).then((results)=>{
+    console.log(results)
+})
 
 
 

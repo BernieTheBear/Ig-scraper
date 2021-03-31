@@ -75,11 +75,20 @@ async function main_scrape_func(un,pw,celebChoice){
 
     //clicking first post
       await driver.sleep(2000)
-      const z = await driver.findElement(By.css('#react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1)'))
-      await z.click()
+      const latestPost = await driver.findElement(By.css('#react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1)'))
+      await latestPost.click()
+    
+    //get date of latest post and write to comments.txt 
+      let latestPostDate =  await driver.wait(until.elementLocated(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.k_Q0X.I0_K8.NnvRN > a > time'))).getAttribute('title')
+      let latestPostDateAsString = 'LATEST POST: ' + latestPostDate + '~~~~'
+      fs.appendFile('comments.txt',latestPostDateAsString,(err)=>{
+        if(err){
+          console.log(err)
+        }
+      })
       
       async function scrapeComments(num){
-        let i = 0
+          let i = 0
           while(i < num){
             //comments = await scrapeCommentsFromPost(driver)
             let postNum = 'POST NUM: ' + i
@@ -96,6 +105,7 @@ async function main_scrape_func(un,pw,celebChoice){
       }
        await scrapeComments(1) //POST NUM HERE !!! //hardcoded number of posts to get (2) chosen for testing, should be dynamically fed
        console.log(chalk.red(':::::DONE::::::'))
+       comments.unshift(latestPostDateAsString)
        return comments;
 }
 //=================================================================================================
@@ -111,8 +121,11 @@ async function main_scrape_func(un,pw,celebChoice){
       
      async function scrapeCommentsFromPost (driver) {   
 
+        let arrayComments = new Array(); //array to hold date and comments from individual post
+        
+       
         //clicks '+' to load more another set of comments -> (driver,numOfCommentSets)
-        await loadMore(driver,1); //ADJUST NUM OF COMMENT SETS HERE!!
+        await loadMore(driver,1); //!!ADJUST NUM OF COMMENT SETS TO GET HERE!!
 
         //**targeting list of comments UL class: 'XQXOT pxf-y' , this returns a web element promise
         let commentListRootPromise = await driver.findElement(By.css('body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul'));
@@ -120,10 +133,9 @@ async function main_scrape_func(un,pw,celebChoice){
         //** Returns an array of promises -specifically getting all elements that ar just Mr508, these are the comments */
         let commentListChildren = await commentListRootPromise.findElements(By.className('Mr508'))
 
-        let arrayComments = new Array();
+       
         /**Iterate each Mr508, find span, and extract inner text, this is the pure comment text, 
           then push to arrayComments */
-
         for(i=0;i<commentListChildren.length;i++){
           //**get span section of 508 to then get text from span using 'innerText' NEED TO DO THIS FOR EACH 508 element
             let spanText508 = await commentListChildren[i].findElement(By.css('.C4VMK > span'))
@@ -192,7 +204,10 @@ async function main_scrape_func(un,pw,celebChoice){
  } 
  
 
-
+//  var UN ='SentiScrape';
+//  var PW ='kirklandExpo';
+//  let celebChoice =  'cristiano'
+// runScraper(UN,PW,celebChoice)
 
 //======================================================
 
