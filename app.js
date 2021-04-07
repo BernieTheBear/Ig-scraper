@@ -20,6 +20,7 @@ const app = express()
 
 // respond with sentiment rating when url with specific celeb choice is requested
     // app.get(`search/${celebChoice}`, function (req, res) {
+
     //     sentimentRating = scraper.main_scrape_func(UN,PW,celebChoice)
     //     res.JSON()//return sentiment rating
     //   })
@@ -28,16 +29,22 @@ const app = express()
 // //MAIN SCRAPE FUNCTION
 const celebChoice = 'kyliejenner'
 
-//check last modified date
+/* Call last modified first before running full scraping function 
+    the goal is to put all data into db under celeb name, so a record for each celeb.
+    If the date we have on file is older than 3 days, run the funciton as new and update the db
+    otherwise pull the stored data and return to user
+    the reason for this is because the scrape function takes awhile to run
+*/
+//check last modified date v2
 function lastModified (file){
     fs.readFile(file,'utf-8',(err,data)=>{
         let t = data.split(' ')
-        let r = t.slice(2,5)
-        console.log(r)
+        let dateAsArrayElement = t[2]
+        let justDateNoTime = (dateAsArrayElement.split('T'))[0]
+        console.log(justDateNoTime)
     })
 }
 lastModified('comments.txt')
-
 
 // async function getAndProcessComments (UN,PW,celebChoice){
     
@@ -51,7 +58,6 @@ lastModified('comments.txt')
 // getAndProcessComments(UN,PW,celebChoice).then((results)=>{
 //     console.log(results)
 // })
-
 
 
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI */
@@ -77,6 +83,25 @@ function symStripFunc (dataIn) {
 
 
 
+
+
+
+
+
+/* RESOURCES AND NOTES 
+
+//check last modified date
+// function lastModified (file){
+//     fs.readFile(file,'utf-8',(err,data)=>{
+//         let t = data.split(' ')
+//         let r = t.slice(2,5)
+//         console.log(r)
+//     })
+// }
+// lastModified('comments.txt')
+
+
+
 /* COMMENT PREPROCESSING BEFORE PASSING TO AI  -> this needs to go in AI script*/
     // fs.readFile('comments.txt','utf-8',(err,data)=>{
         
@@ -99,10 +124,6 @@ function symStripFunc (dataIn) {
 
 
 
-
-
-
-/* RESOURCES AND NOTES 
 https://github.com/nizaroni/emoji-strip
 https://stackoverflow.com/questions/6456864/why-does-node-js-fs-readfile-return-a-buffer-instead-of-string
 https://stackoverflow.com/questions/19245897/regex-to-remove-multiple-comma-and-spaces-from-string-in-javascript
