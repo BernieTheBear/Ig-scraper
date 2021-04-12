@@ -8,11 +8,43 @@ const e = require('express');
 const { until } = require('selenium-webdriver');
 const { run } = require('./insta-scrape-test.js');
 const AIScript2 = require('./AI-script2.js');
+const chalk = require('chalk')
+const celebSchema = require('./models/celeb')
 
+//db connection properties
+require('dotenv').config()
+const mongoose = require('mongoose')
+
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser:true})
+const db = mongoose.connection
+db.on('error',(error)=> console.log(chalk.redBright(error)))
+db.once('open', ()=>console.log(chalk.bgGreenBright('SUCCESSFULLY CONNECTED TO DATABASE')))
+
+
+const celeb = new celebSchema({
+    title: 'kylie',
+    handle: '@kylieJenner'
+})
+//db test
+
+async function testFunc() {
+    try{
+        const test = await celeb.save()
+        console.log(test)
+    
+    } catch(error){
+        console.log('there was an error: ' + error)
+    }
+}
+
+testFunc()
 
 
 var UN ='SentiScrape';
 var PW ='kirklandExpo';
+
+
+
 
 
 //REQUEST ROUTING
@@ -36,15 +68,15 @@ const celebChoice = 'kyliejenner'
     the reason for this is because the scrape function takes awhile to run
 */
 //check last modified date v2
-function lastModified (file){
-    fs.readFile(file,'utf-8',(err,data)=>{
-        let t = data.split(' ')
-        let dateAsArrayElement = t[2]
-        let justDateNoTime = (dateAsArrayElement.split('T'))[0]
-        console.log(justDateNoTime)
-    })
-}
-lastModified('comments.txt')
+// function lastModified (file){
+//     fs.readFile(file,'utf-8',(err,data)=>{
+//         let t = data.split(' ')
+//         let dateAsArrayElement = t[2]
+//         let justDateNoTime = (dateAsArrayElement.split('T'))[0]
+//         console.log(justDateNoTime)
+//     })
+// }
+// lastModified('comments.txt')
 
 // async function getAndProcessComments (UN,PW,celebChoice){
     
@@ -122,7 +154,7 @@ function symStripFunc (dataIn) {
     // }
     
 
-
+/*
 
 https://github.com/nizaroni/emoji-strip
 https://stackoverflow.com/questions/6456864/why-does-node-js-fs-readfile-return-a-buffer-instead-of-string

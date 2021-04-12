@@ -18,12 +18,18 @@ SELECTING CHILDREN OF NODE
 https://stackoverflow.com/questions/5119655/xpath-to-get-all-child-nodes-elements-comments-and-text-without-parent/5119937
 Await examples
 https://medium.com/@giltayar/javascript-asynchrony-and-async-await-in-selenium-webdriver-tests-a89924421f65
+
+
+***** chromedriver not on path -> fixed by adding 'require chromedriver' and installing chromedriver with npm
+https://stackoverflow.com/questions/26191142/selenium-nodejs-chromedriver-path 
+
 */
 
 
 
 
 const {By,Builder,Key,util,withTagName,cssSelector,Select, WebDriver,until, promise,Promise,Map,map} = require('selenium-webdriver');
+require('chromedriver')
 const { elementIsDisabled } = require('selenium-webdriver/lib/until');
 const fs = require('fs')
 const chalk = require('chalk')

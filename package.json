@@ -9,10 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chromedriver": "^88.0.0",
+    "@tensorflow-models/toxicity": "^1.2.2",
+    "@tensorflow/tfjs": "^3.3.0",
+    "@tensorflow/tfjs-node": "^0.1.21",
+    "chalk": "^4.1.0",
+    "chromedriver": "^89.0.0",
+    "dotenv": "^8.2.0",
     "emoji-strip": "^1.0.1",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
+    "mongoose": "^5.12.3",
     "selenium-webdriver": "^4.0.0-alpha.8"
   }
 }

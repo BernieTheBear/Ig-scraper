@@ -1,5 +1,4 @@
 const toxicityMod = require('@tensorflow-models/toxicity')
-const tf = require('@tensorflow/tfjs');
 require('@tensorflow/tfjs-node');
 const fs = require('fs')
 const emojiStrip = require('emoji-strip')
@@ -142,6 +141,16 @@ console.log(JSON.parse(predictions));
 
 
 /*
+
+ISSUE:
+Platform node has already been set. Overwriting the platform with [object Object].
+cpu backend was already registered. Reusing existing backend factory.
+
+tried npm update -> https://stackoverflow.com/questions/51675830/tensorflow-js-typeerror-backend-select-is-not-a-function
+what i did was: npm install @tensorflow/tfjs-node again and regular tfjs
+and removed the require statement for tfjs in AI script and just left the require for tfjs-node
+
+
 https://www.kdnuggets.com/2020/03/tensorflow-keras-tokenization-text-data-prep.html
 https://github.com/tensorflow/tfjs-models/blob/master/toxicity/demo/index.js
 https://github.com/conversationai/conversationai.github.io/blob/master/crowdsourcing_annotation_schemes/toxicity_with_subattributes.md
